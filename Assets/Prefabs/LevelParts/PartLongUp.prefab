@@ -433,6 +433,7 @@ MonoBehaviour:
   - {fileID: 3896232598925535537}
   - {fileID: 1879653285387093264}
   EndPosition: {fileID: 6806639600003713084}
+  poolingKey: PartLongUp
 --- !u!1 &3237778405692733347
 GameObject:
   m_ObjectHideFlags: 0

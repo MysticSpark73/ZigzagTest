@@ -87,6 +87,7 @@ MonoBehaviour:
   - {fileID: 7468831639669945734}
   - {fileID: 7468831640935427409}
   EndPosition: {fileID: 4074806933508816905}
+  poolingKey: PartZigzag
 --- !u!1 &7468831639669945735
 GameObject:
   m_ObjectHideFlags: 0

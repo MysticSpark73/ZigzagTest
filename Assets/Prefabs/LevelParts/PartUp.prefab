@@ -419,6 +419,7 @@ MonoBehaviour:
   - {fileID: 4594668678848352760}
   - {fileID: 2677510983774698562}
   EndPosition: {fileID: 5309818975229791137}
+  poolingKey: PartUp
 --- !u!1 &5368124660140117099
 GameObject:
   m_ObjectHideFlags: 0

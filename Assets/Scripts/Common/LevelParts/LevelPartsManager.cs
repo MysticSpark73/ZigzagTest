@@ -12,11 +12,20 @@ namespace Zagzag
         [SerializeField] private LevelPart startPart;
         private Queue<LevelPart> queuedParts;
         private LevelPart lastEnqueuedPart;
+        private List<LevelPart> recyclingParts;
+
+        Vector3 playerPos;
 
         private void Start()
         {
             queuedParts = new Queue<LevelPart>();
+            recyclingParts = new List<LevelPart>();
             PrepareGameStart();
+        }
+
+        private void Update()
+        {
+            CheckReturnPart();
         }
 
         private void SpawnPart(Vector3 pos) 
@@ -37,11 +46,43 @@ namespace Zagzag
             startPart.gameObject.SetActive(true);
             queuedParts.Clear();
             SpawnPart(startPart.GetEndPosition());
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 5; i++)
             {
                 SpawnPart(lastEnqueuedPart.GetEndPosition());
             }
             Parameters.SetGameState(GameState.Ready);
         }
+
+        private async void CheckReturnPart()
+        {
+            playerPos = Parameters.GetCharacterPos();
+            //Debug.Log($"Player pos = {playerPos}");
+            //Debug.Log($"First part delta = {Vector3.Distance(queuedParts.Peek().GetEndPosition(), queuedParts.Peek().transform.position)}");
+            if (startPart.gameObject.activeSelf)
+            {
+                if (Vector3.Distance(playerPos, startPart.transform.position) > Vector3.Distance(startPart.GetEndPosition(), startPart.transform.position))
+                {
+                    RecyclePart(startPart);
+                    return;
+                }
+            }
+            if (Vector3.Distance(playerPos, queuedParts.Peek().transform.position) > Vector3.Distance(queuedParts.Peek().GetEndPosition(), queuedParts.Peek().transform.position))
+            {
+                RecyclePart(queuedParts.Dequeue());
+            }
+        }
+
+        private async void RecyclePart(LevelPart part) 
+        {
+            if (recyclingParts.Contains(part))
+            {
+                return;
+            }
+            recyclingParts.Add(part);
+            await part.Hide();
+            SpawnPart(lastEnqueuedPart.GetEndPosition());
+            recyclingParts.Remove(part);
+        }
+
     }
 }

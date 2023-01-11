@@ -52,17 +52,16 @@ namespace Zagzag.Common.Character
             switch (direction)
             {
                 case MoveDirection.Right:
-                    //rb.velocity = Vector3.right * speed;
                     rb.velocity = new Vector3(speed, rb.velocity.y, 0);
                     break;
                 case MoveDirection.Left:
-                    //rb.velocity = Vector3.forward * speed;
                     rb.velocity = new Vector3(0, rb.velocity.y, speed);
                     break;
                 default:
                     rb.velocity = Vector3.zero;
                     break;
             }
+            Parameters.SetCharacterPos(transform.position);
         }
 
         private void OnGetControl() 

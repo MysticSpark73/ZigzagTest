@@ -7,6 +7,7 @@ namespace Zagzag.Core.Data
     {
         #region ObjectPoolerKeys
 
+        //should be the same as respective prefabs names
         public static readonly string pooler_key_part_zigzag = "PartZigzag";
         public static readonly string pooler_key_part_up = "PartUp";
         public static readonly string pooler_key_part_long_up = "PartLongUp";
@@ -49,6 +50,7 @@ namespace Zagzag.Core.Data
 
         private static float moveSpeed = 3;
         private static float moveSpeedIncrement = .5f;
+        private static Vector3 characterPos = Vector3.zero;
 
         public static float GetMoveSpeed() => moveSpeed;
 
@@ -62,6 +64,16 @@ namespace Zagzag.Core.Data
         {
             moveSpeed = 3;
             EventsManager.OnSpeedChanged?.Invoke(moveSpeed);
+        }
+
+        public static Vector3 GetCharacterPos() 
+        {
+            return characterPos;
+        }
+
+        public static void SetCharacterPos(Vector3 pos) 
+        {
+            characterPos = pos;
         }
 
         #endregion

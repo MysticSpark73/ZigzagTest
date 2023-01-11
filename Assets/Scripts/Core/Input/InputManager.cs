@@ -27,28 +27,14 @@ namespace Zagzag.Core.Input
 
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                if (UnityEngine.Input.mousePosition.x < Screen.width / 2)
-                {
-                    EventsManager.TapLeft?.Invoke();
-                }
-                if (UnityEngine.Input.mousePosition.x > Screen.width / 2)
-                {
-                    EventsManager.TapRight?.Invoke();
-                }
+                EventsManager.OnTap?.Invoke();
             }
 
 #elif UNITY_ANDROID
 
-            if (UnityEngine.Input.touchCount > 0)
+            if (UnityEngine.Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                if (UnityEngine.Input.GetTouch(0).position.x < Screen.width / 2)
-                {
-                    EventsManager.TapLeft?.Invoke();
-                }
-                if (UnityEngine.Input.GetTouch(0).position.x > Screen.width / 2)
-                {
-                    EventsManager.TapRight?.Invoke();
-                }
+                EventsManager.OnTap?.Invoke();
             }
 
 #endif

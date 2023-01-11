@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zagzag.Common.LevelParts;
+using Zagzag.Core.Data;
 using Zagzag.Core.Pooling;
 
 namespace Zagzag
@@ -16,12 +16,7 @@ namespace Zagzag
         private void Start()
         {
             queuedParts = new Queue<LevelPart>();
-            lastEnqueuedPart = startPart;
-            queuedParts.Enqueue(startPart);
-            for (int i = 0; i < 15; i++)
-            {
-                SpawnPart(lastEnqueuedPart.GetEndPosition());
-            }
+            PrepareGameStart();
         }
 
         private void SpawnPart(Vector3 pos) 
@@ -35,6 +30,18 @@ namespace Zagzag
             }
             lastEnqueuedPart = part;
             queuedParts.Enqueue(part);
+        }
+
+        private void PrepareGameStart() 
+        {
+            startPart.gameObject.SetActive(true);
+            queuedParts.Clear();
+            SpawnPart(startPart.GetEndPosition());
+            for (int i = 0; i < 15; i++)
+            {
+                SpawnPart(lastEnqueuedPart.GetEndPosition());
+            }
+            Parameters.SetGameState(GameState.Ready);
         }
     }
 }

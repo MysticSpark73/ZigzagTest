@@ -1,4 +1,5 @@
 using System;
+using Zagzag.Core.Data;
 
 namespace Zagzag.Core.Events
 {
@@ -6,8 +7,27 @@ namespace Zagzag.Core.Events
     {
         #region Input
 
-        public static Action TapRight;
-        public static Action TapLeft;
+        public static Action OnTap;
+
+        #endregion
+
+        #region GameState
+
+        public static Action<GameState> OnGameStateChanged;
+
+        public static Action OnGameRestart;
+
+        #endregion
+
+        #region Character
+
+        public static Action<float> OnSpeedChanged;
+
+        #endregion
+
+        #region Score
+
+        public static Action<int> OnScoreChanged;
 
         #endregion
     }

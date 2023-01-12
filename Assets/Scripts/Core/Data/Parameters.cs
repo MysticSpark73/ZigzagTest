@@ -81,6 +81,7 @@ namespace Zagzag.Core.Data
 
         private static int score = 0;
         private static int highScore = 0;
+        private static int gems = 0;
 
         public static void AddScore(int value) 
         {
@@ -92,9 +93,14 @@ namespace Zagzag.Core.Data
             score = 0;
         }
 
-        public static void UpdateHighScore(int value) 
+        public static void UpdateHighScore() 
         {
-            highScore = value > highScore ? value : highScore;
+            highScore = score > highScore ? score : highScore;
+        }
+
+        public static void AddGems(int value) 
+        {
+            gems += value;
         }
 
         #endregion

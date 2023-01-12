@@ -8,6 +8,7 @@ namespace Zagzag.Common.Character
     {
         [SerializeField] private Rigidbody rb;
 
+        private Vector3 startPos = Vector3.up * .25f;
         private float speed;
         private MoveDirection direction = MoveDirection.Left;
 
@@ -18,10 +19,11 @@ namespace Zagzag.Common.Character
 
         private void Update()
         {
-            if (transform.position.y < 0)
+            if (transform.position.y < startPos.y - .1f)
             {
                 OnLoseControl();
                 Parameters.SetGameState(GameState.Over);
+                Parameters.UpdateHighScore();
             }
             if (Parameters.GetGameState() == GameState.Palying)
             {

@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zagzag.Common.Gems;
 using Zagzag.Core.Pooling;
 
 namespace Zagzag.Common.LevelParts
@@ -9,6 +10,7 @@ namespace Zagzag.Common.LevelParts
     public class LevelPart : MonoBehaviour, IPoolable
     {
         [SerializeField] private List<LevelBlock> blocks;
+        [SerializeField] private List<Gem> gems;
         [SerializeField] private Transform EndPosition;
         [SerializeField] private string poolingKey;
 
@@ -21,7 +23,7 @@ namespace Zagzag.Common.LevelParts
 
         public void OnPool()
         {
-            
+            ReinitGems();
         }
 
         public void OnReturn()
@@ -65,6 +67,14 @@ namespace Zagzag.Common.LevelParts
             for (int i = 0; i < blocks.Count; i++)
             {
                 blocks[i].transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+            }
+        }
+
+        private void ReinitGems() 
+        {
+            for (int i = 0; i < gems.Count; i++)
+            {
+                gems[i].Init();
             }
         }
 

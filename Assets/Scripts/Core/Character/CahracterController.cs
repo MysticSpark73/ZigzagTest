@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zagzag.Core.Data;
 using Zagzag.Core.Events;
@@ -14,7 +15,9 @@ namespace Zagzag.Common.Character
 
         private void Awake()
         {
+            EventsManager.OnGameRestart += OnGameRestart;
             OnGetControl();
+
         }
 
         private void Update()
@@ -29,10 +32,15 @@ namespace Zagzag.Common.Character
             {
                 Move();
             }
+            else
+            {
+                rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            }
         }
 
         private void OnApplicationQuit()
         {
+            EventsManager.OnGameRestart -= OnGameRestart;
             OnLoseControl();
         }
 
@@ -73,6 +81,8 @@ namespace Zagzag.Common.Character
             speed = Parameters.GetMoveSpeed();
         }
 
+
+
         private void OnLoseControl() 
         {
             EventsManager.OnTap -= OnTap;
@@ -98,6 +108,13 @@ namespace Zagzag.Common.Character
         private void OnSpeedChanged(float newSpeed) 
         {
             
+        }
+
+        private void OnGameRestart()
+        {
+            transform.position = Vector3.up *5f;
+            direction = MoveDirection.Left;
+            OnGetControl();
         }
 
         private enum MoveDirection : byte 

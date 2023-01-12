@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Zagzag.Common.LevelParts;
+using Zagzag.Common.UI.Dialogs;
+using Zagzag.Common.UI.Dialogs.MainDialog;
 using Zagzag.Core.Data;
+using Zagzag.Core.Events;
 using Zagzag.Core.Pooling;
 
 namespace Zagzag
@@ -16,6 +19,11 @@ namespace Zagzag
 
         Vector3 playerPos;
 
+        private void Awake() 
+        {
+            EventsManager.OnGameRestart += OnGameRestart;
+        }
+
         private void Start()
         {
             queuedParts = new Queue<LevelPart>();
@@ -23,9 +31,17 @@ namespace Zagzag
             PrepareGameStart();
         }
 
+        private void OnApplicationQuit()
+        {
+            EventsManager.OnGameRestart -= OnGameRestart;
+        }
+
         private void Update()
         {
-            CheckReturnPart();
+            if (Parameters.GetGameState() == GameState.Palying)
+            {
+                CheckReturnPart();
+            }
         }
 
         private void SpawnPart(Vector3 pos) 
@@ -41,19 +57,24 @@ namespace Zagzag
             queuedParts.Enqueue(part);
         }
 
-        private void PrepareGameStart() 
+        private async void PrepareGameStart() 
         {
             startPart.gameObject.SetActive(true);
-            queuedParts.Clear();
+            while (queuedParts.Count > 0)
+            {
+                LevelPart part = queuedParts.Dequeue();
+                await part.Hide(false);
+            }
             SpawnPart(startPart.GetEndPosition());
             for (int i = 0; i < 5; i++)
             {
                 SpawnPart(lastEnqueuedPart.GetEndPosition());
             }
             Parameters.SetGameState(GameState.Ready);
+            DialogManager.Instance.ShowDialog<MainDialog>();
         }
 
-        private async void CheckReturnPart()
+        private void CheckReturnPart()
         {
             playerPos = Parameters.GetCharacterPos();
             //Debug.Log($"Player pos = {playerPos}");
@@ -82,6 +103,12 @@ namespace Zagzag
             await part.Hide();
             SpawnPart(lastEnqueuedPart.GetEndPosition());
             recyclingParts.Remove(part);
+        }
+
+        private void OnGameRestart() 
+        {
+            PrepareGameStart();
+            Parameters.SetGameState(GameState.Ready);
         }
 
     }

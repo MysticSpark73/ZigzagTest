@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zagzag.Core.Events;
 
 namespace Zagzag.Core.Input
@@ -25,16 +26,22 @@ namespace Zagzag.Core.Input
 
 #if UNITY_EDITOR
 
-            if (UnityEngine.Input.GetMouseButtonDown(0))
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                EventsManager.OnTap?.Invoke();
+                if (UnityEngine.Input.GetMouseButtonDown(0))
+                {
+                    EventsManager.OnTap?.Invoke();
+                }
             }
 
 #elif UNITY_ANDROID
 
-            if (UnityEngine.Input.GetTouch(0).phase == TouchPhase.Began)
+            if (!EventSystem.current.IsPointerOverGameObject(UnityEngine.Input.GetTouch(0).fingerId))
             {
-                EventsManager.OnTap?.Invoke();
+                if (UnityEngine.Input.GetTouch(0).phase == TouchPhase.Began)
+                {
+                    EventsManager.OnTap?.Invoke();
+                }
             }
 
 #endif

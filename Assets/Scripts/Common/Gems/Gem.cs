@@ -13,8 +13,11 @@ namespace Zagzag.Common.Gems
         private float hideAnimDuration = .5f;
         private float idleAnimValue = 1f;
 
+        Vector3 initialScale;
+
         public void Init() 
         {
+            initialScale = transform.localScale;
             gameObject.SetActive(true);
             IdleAnim();
         }
@@ -30,7 +33,7 @@ namespace Zagzag.Common.Gems
                 particleEffect.SetActive(true);
             }).OnComplete(() => {
                 gameObject.SetActive(false);
-                transform.localScale = Vector3.one;
+                transform.localScale = initialScale;
                 particleEffect.SetActive(false);
             });
         }

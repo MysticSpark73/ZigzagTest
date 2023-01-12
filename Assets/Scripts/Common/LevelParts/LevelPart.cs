@@ -46,13 +46,13 @@ namespace Zagzag.Common.LevelParts
 
         public Vector3 GetEndPosition() => EndPosition.position;
 
-        public async Task Hide() 
+        public async Task Hide(bool animate = true) 
         {
             bool isComplete = false;
             Sequence sequence = DOTween.Sequence();
             for (int i = 0; i < blocks.Count; i++)
             {
-                sequence.Insert(i * blockHideDelay, blocks[i].transform.DOMoveY(blockHidePos, blockHideAnimDuration).SetEase(Ease.InQuad));
+                sequence.Insert(animate ? i * blockHideDelay : 0, blocks[i].transform.DOMoveY(blockHidePos, animate ? blockHideAnimDuration : 0).SetEase(Ease.InQuad));
             }
             sequence.OnComplete(
                 () => { isComplete = true; });
@@ -66,7 +66,7 @@ namespace Zagzag.Common.LevelParts
         {
             for (int i = 0; i < blocks.Count; i++)
             {
-                blocks[i].transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+                blocks[i].transform.localPosition = new Vector3(blocks[i].transform.localPosition.x, -0.75f, blocks[i].transform.localPosition.z);
             }
         }
 

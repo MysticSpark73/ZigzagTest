@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zagzag.Core.Data;
 using Zagzag.Core.Events;
 
 namespace Zagzag.Common.UI.Dialogs.GameOverDialog
@@ -14,13 +15,18 @@ namespace Zagzag.Common.UI.Dialogs.GameOverDialog
         [SerializeField] private TextMeshProUGUI score;
         [SerializeField] private TextMeshProUGUI highScore;
         [SerializeField] private RectTransform bodyTransform;
+        [SerializeField] private Image bodyImage;
         [SerializeField] private RectTransform retryButtonTransform;
         [SerializeField] private Button retryButton;
+        [SerializeField] private Color defaultcolor;
+        [SerializeField] private Color newHighScoreColor;
 
         private float showAnimDuration = .5f;
         private float hideAnimDuration = .25f;
-
         private float rightMoveDist = Screen.width;
+
+        private int scoreValue;
+        private int highScoreValue;
 
         private Vector2 titlePos;
         private Vector2 bodyPos;
@@ -64,7 +70,10 @@ namespace Zagzag.Common.UI.Dialogs.GameOverDialog
             titlePos = title.rectTransform.anchoredPosition;
             bodyPos = bodyTransform.anchoredPosition;
             retryPos = retryButtonTransform.anchoredPosition;
+            scoreValue = Parameters.GetScore();
+            highScoreValue = Parameters.GetHighScore();
             SetListeners();
+            SetValues();
             await base.Init(animate, callback);
         }
 
@@ -79,6 +88,13 @@ namespace Zagzag.Common.UI.Dialogs.GameOverDialog
             title.rectTransform.anchoredPosition = titlePos;
             bodyTransform.anchoredPosition = bodyPos;
             retryButtonTransform.anchoredPosition = retryPos;
+        }
+
+        private void SetValues() 
+        {
+            score.text = scoreValue.ToString();
+            highScore.text = highScoreValue.ToString();
+            bodyImage.color = scoreValue == highScoreValue ? newHighScoreColor : defaultcolor;
         }
     }
 }

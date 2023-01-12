@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zagzag.Core.Data;
 
 namespace Zagzag.Common.UI.Dialogs.LevelDialog
 {
@@ -31,6 +32,11 @@ namespace Zagzag.Common.UI.Dialogs.LevelDialog
         {
             SetListeners();
             await base.Init(animate, callback);
+        }
+
+        public void UpdateScore(int score) 
+        {
+            scoreText.text = score.ToString();
         }
 
         private void SetListeners() 

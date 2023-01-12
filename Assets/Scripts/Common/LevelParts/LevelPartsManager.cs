@@ -70,15 +70,15 @@ namespace Zagzag
             {
                 SpawnPart(lastEnqueuedPart.GetEndPosition());
             }
-            Parameters.SetGameState(GameState.Ready);
+            Parameters.ResetDataOnGameRestart();
             DialogManager.Instance.ShowDialog<MainDialog>();
+            EventsManager.OnGamePrepeared?.Invoke();
+            Parameters.SetGameState(GameState.Ready);
         }
 
         private void CheckReturnPart()
         {
             playerPos = Parameters.GetCharacterPos();
-            //Debug.Log($"Player pos = {playerPos}");
-            //Debug.Log($"First part delta = {Vector3.Distance(queuedParts.Peek().GetEndPosition(), queuedParts.Peek().transform.position)}");
             if (startPart.gameObject.activeSelf)
             {
                 if (Vector3.Distance(playerPos, startPart.transform.position) > Vector3.Distance(startPart.GetEndPosition(), startPart.transform.position))
@@ -89,6 +89,7 @@ namespace Zagzag
             }
             if (Vector3.Distance(playerPos, queuedParts.Peek().transform.position) > Vector3.Distance(queuedParts.Peek().GetEndPosition(), queuedParts.Peek().transform.position))
             {
+                Parameters.IncreaseMoveSpeed();
                 RecyclePart(queuedParts.Dequeue());
             }
         }

@@ -15,8 +15,9 @@ namespace Zagzag.Common.Character
 
         private void Awake()
         {
-            EventsManager.OnGameRestart += OnGameRestart;
-            OnGetControl();
+            //EventsManager.OnGameRestart += OnGameRestart;
+            EventsManager.OnGamePrepeared += OnGamePrepeared;
+            //OnGetControl();
 
         }
 
@@ -25,8 +26,8 @@ namespace Zagzag.Common.Character
             if (transform.position.y < startPos.y - .1f)
             {
                 OnLoseControl();
-                Parameters.SetGameState(GameState.Over);
                 Parameters.UpdateHighScore();
+                Parameters.SetGameState(GameState.Over);
             }
             if (Parameters.GetGameState() == GameState.Palying)
             {
@@ -40,7 +41,8 @@ namespace Zagzag.Common.Character
 
         private void OnApplicationQuit()
         {
-            EventsManager.OnGameRestart -= OnGameRestart;
+            //EventsManager.OnGameRestart -= OnGameRestart;
+            EventsManager.OnGamePrepeared -= OnGamePrepeared;
             OnLoseControl();
         }
 
@@ -81,8 +83,6 @@ namespace Zagzag.Common.Character
             speed = Parameters.GetMoveSpeed();
         }
 
-
-
         private void OnLoseControl() 
         {
             EventsManager.OnTap -= OnTap;
@@ -107,12 +107,12 @@ namespace Zagzag.Common.Character
 
         private void OnSpeedChanged(float newSpeed) 
         {
-            
+            speed = newSpeed;
         }
 
-        private void OnGameRestart()
+        private void OnGamePrepeared() 
         {
-            transform.position = Vector3.up *5f;
+            transform.position = Vector3.up * 5f;
             direction = MoveDirection.Left;
             OnGetControl();
         }

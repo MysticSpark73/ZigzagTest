@@ -17,6 +17,8 @@ namespace Zagzag.Core.Events
 
         public static Action OnGameRestart;
 
+        public static Action OnGamePrepeared;
+
         #endregion
 
         #region Character

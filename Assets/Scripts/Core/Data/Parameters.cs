@@ -45,11 +45,17 @@ namespace Zagzag.Core.Data
             }
         }
 
+        public static void ResetDataOnGameRestart() 
+        {
+            ResetScore();
+            ResetMoveSpeed();
+        }
+
         #endregion
         #region Character
 
         private static float moveSpeed = 3;
-        private static float moveSpeedIncrement = .5f;
+        private static float moveSpeedIncrement = .1f;
         private static Vector3 characterPos = Vector3.zero;
 
         public static float GetMoveSpeed() => moveSpeed;
@@ -86,7 +92,12 @@ namespace Zagzag.Core.Data
         public static void AddScore(int value) 
         {
             score += value;
+            EventsManager.OnScoreChanged?.Invoke(score);
         }
+
+        public static int GetScore() => score;
+
+        public static int GetHighScore() => highScore;
 
         public static void ResetScore() 
         {
@@ -102,6 +113,8 @@ namespace Zagzag.Core.Data
         {
             gems += value;
         }
+
+        public static int GetGems() => gems;
 
         #endregion
     }

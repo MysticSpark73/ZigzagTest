@@ -17,12 +17,14 @@ namespace Zagzag.Common.UI.Dialogs
             Instance = this;
             EventsManager.OnGameStateChanged += OnGameStateChanged;
             EventsManager.OnGameRestart += OnGameRestart;
+            EventsManager.OnScoreChanged += OnScoreChanged;
         }
 
         private void OnApplicationQuit()
         {
             EventsManager.OnGameStateChanged -= OnGameStateChanged;
             EventsManager.OnGameRestart -= OnGameRestart;
+            EventsManager.OnScoreChanged -= OnScoreChanged;
         }
 
         public async void ShowDialog<T>(bool animate = true, Action callback = null)
@@ -92,7 +94,19 @@ namespace Zagzag.Common.UI.Dialogs
         private void OnGameRestart() 
         {
             HideAll();
-            //ShowDialog<MainDialog.MainDialog>();
+        }
+
+        private void OnScoreChanged(int score) 
+        {
+            if (IsDialogShowing<LevelDialog.LevelDialog>())
+            {
+                var dialog = (LevelDialog.LevelDialog) dialogs.FirstOrDefault(d => d is LevelDialog.LevelDialog);
+                if (dialog == null)
+                {
+                    return;
+                }
+                dialog.UpdateScore(score);
+            }
         }
 
         private async void HideAll(bool animate = true) 

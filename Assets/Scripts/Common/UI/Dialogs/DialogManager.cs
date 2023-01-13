@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zagzag.Common.Audio;
 using Zagzag.Core.Data;
 using Zagzag.Core.Events;
 
@@ -80,6 +81,7 @@ namespace Zagzag.Common.UI.Dialogs
                 case GameState.Ready:
                     break;
                 case GameState.Over:
+                    AudioController.Instance.PlaySound(Sounds.GameOver);
                     HideDialog<LevelDialog.LevelDialog>(true, () => ShowDialog<GameOverDialog.GameOverDialog>());
                     break;
                 case GameState.Pause:

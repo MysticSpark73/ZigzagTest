@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zagzag.Common.Audio;
 
 namespace Zagzag.Common.UI.Dialogs.OptionsDialog
 {
@@ -22,6 +23,11 @@ namespace Zagzag.Common.UI.Dialogs.OptionsDialog
         private float showAnimDuration = .5f;
         private float hideAnimDuration = .3f;
         private float moveUpDist = Screen.height;
+
+        private const string mutedText = "Unmute Sounds";
+        private const string unmutedText = "Mute Sounds";
+        private const string cheatingText = "Off Cheating";
+        private const string notCheatingText = "On Cheating";
 
         private Vector2 titlePos;
         private Vector2 bodyTransformPos;
@@ -67,6 +73,7 @@ namespace Zagzag.Common.UI.Dialogs.OptionsDialog
             titlePos = title.rectTransform.anchoredPosition;
             bodyTransformPos = bodyTransform.anchoredPosition;
             backButtonPos = backButtonTransform.anchoredPosition;
+            SetValues();
             SetListeners();
             await base.Init(animate, callback);
         }
@@ -74,7 +81,35 @@ namespace Zagzag.Common.UI.Dialogs.OptionsDialog
         private void SetListeners() 
         {
             backButton.onClick.RemoveAllListeners();
-            backButton.onClick.AddListener(() => DialogManager.Instance.HideDialog<OptionsDialog>());
+            backButton.onClick.AddListener(() => OnBackClicked());
+            soundsButton.onClick.RemoveAllListeners();
+            soundsButton.onClick.AddListener(() => OnSoundClicked());
+            //add chaeting
+        }
+
+        private void OnBackClicked() 
+        {
+            AudioController.Instance.PlaySound(Sounds.Menu);
+            DialogManager.Instance.HideDialog<OptionsDialog>();
+        }
+
+        private void OnSoundClicked() 
+        {
+            AudioController.Instance.PlaySound(Sounds.Menu);
+            if (AudioController.Instance.IsMuted)
+            {
+                AudioController.Instance.UnmuteSounds();
+            }
+            else
+            {
+                AudioController.Instance.MuteSounds();
+            }
+            SetValues();
+        }
+
+        private void SetValues() 
+        {
+            soundText.text = AudioController.Instance.IsMuted ? mutedText : unmutedText;
         }
 
         private void DialogReset() 

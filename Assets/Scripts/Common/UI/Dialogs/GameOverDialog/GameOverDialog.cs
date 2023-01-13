@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zagzag.Common.Audio;
 using Zagzag.Core.Data;
 using Zagzag.Core.Events;
 
@@ -80,7 +81,13 @@ namespace Zagzag.Common.UI.Dialogs.GameOverDialog
         private void SetListeners() 
         {
             retryButton.onClick.RemoveAllListeners();
-            retryButton.onClick.AddListener(() => EventsManager.OnGameRestart?.Invoke());
+            retryButton.onClick.AddListener(() => Retry());
+        }
+
+        private void Retry() 
+        {
+            AudioController.Instance.PlaySound(Sounds.Menu);
+            EventsManager.OnGameRestart?.Invoke();
         }
 
         private void DialogReset() 

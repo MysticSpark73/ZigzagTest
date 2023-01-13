@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zagzag.Common.Audio;
 using Zagzag.Core.Data;
 
 namespace Zagzag.Common.UI.Dialogs.LevelDialog
@@ -42,7 +43,13 @@ namespace Zagzag.Common.UI.Dialogs.LevelDialog
         private void SetListeners() 
         {
             pauseButton.onClick.RemoveAllListeners();
-            pauseButton.onClick.AddListener(() => DialogManager.Instance.ShowDialog<PauseDialog.PauseDialog>());
+            pauseButton.onClick.AddListener(() => OnPause());
+        }
+
+        private void OnPause() 
+        {
+            AudioController.Instance.PlaySound(Sounds.Menu);
+            DialogManager.Instance.ShowDialog<PauseDialog.PauseDialog>();
         }
     }
 }

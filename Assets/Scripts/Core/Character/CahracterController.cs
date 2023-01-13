@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Zagzag.Common.Audio;
 using Zagzag.Core.Data;
 using Zagzag.Core.Events;
 
@@ -23,7 +24,7 @@ namespace Zagzag.Common.Character
 
         private void Update()
         {
-            if (transform.position.y < startPos.y - .1f)
+            if (transform.position.y < startPos.y - .1f && Parameters.GetGameState() == GameState.Palying)
             {
                 OnLoseControl();
                 Parameters.UpdateHighScore();
@@ -95,14 +96,16 @@ namespace Zagzag.Common.Character
             {
                 Parameters.AddScore(1);
                 ToggleDirection();
+                AudioController.Instance.PlaySound(Sounds.Ball);
             }
             else if (Parameters.GetGameState() == GameState.Ready)
             {
                 Parameters.AddScore(1);
                 ToggleDirection();
                 Parameters.SetGameState(GameState.Palying);
+                AudioController.Instance.PlaySound(Sounds.Ball);
             }
-            
+
         }
 
         private void OnSpeedChanged(float newSpeed) 

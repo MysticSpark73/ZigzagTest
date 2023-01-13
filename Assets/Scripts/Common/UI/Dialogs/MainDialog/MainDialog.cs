@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using Zagzag.Core.Data;
+using Zagzag.Common.Audio;
 
 namespace Zagzag.Common.UI.Dialogs.MainDialog
 {
@@ -87,7 +88,13 @@ namespace Zagzag.Common.UI.Dialogs.MainDialog
         private void SetListeners() 
         {
             optionsButton.onClick.RemoveAllListeners();
-            optionsButton.onClick.AddListener(()=> { DialogManager.Instance.ShowDialog<OptionsDialog.OptionsDialog>(); });
+            optionsButton.onClick.AddListener(()=> OnOptions());
+        }
+
+        private void OnOptions() 
+        {
+            AudioController.Instance.PlaySound(Sounds.Menu);
+            DialogManager.Instance.ShowDialog<OptionsDialog.OptionsDialog>();
         }
 
         private void SetValues() 

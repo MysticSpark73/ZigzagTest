@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using Zagzag.Common.Audio;
 using Zagzag.Core.Data;
 
 namespace Zagzag.Common.Gems
@@ -41,6 +42,7 @@ namespace Zagzag.Common.Gems
         private void OnTriggerEnter(Collider other)
         {
             Parameters.AddGems(1);
+            AudioController.Instance.PlaySound(Sounds.GemPickup);
             HideAnim();
         }
 

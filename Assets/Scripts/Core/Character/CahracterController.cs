@@ -11,14 +11,18 @@ namespace Zagzag.Common.Character
         [SerializeField] private Rigidbody rb;
 
         private Vector3 startPos = Vector3.up * .25f;
+        private Vector3 lookDirection;
         private float speed;
+        private bool isCheating;
         private MoveDirection direction = MoveDirection.Left;
+
+        private int layerMask;
 
         private void Awake()
         {
-            //EventsManager.OnGameRestart += OnGameRestart;
             EventsManager.OnGamePrepeared += OnGamePrepeared;
-            //OnGetControl();
+            EventsManager.OnIsCheatingChanged += OnIsCheatingChanged;
+            layerMask = LayerMask.GetMask("Cheat");
 
         }
 
@@ -42,8 +46,8 @@ namespace Zagzag.Common.Character
 
         private void OnApplicationQuit()
         {
-            //EventsManager.OnGameRestart -= OnGameRestart;
             EventsManager.OnGamePrepeared -= OnGamePrepeared;
+            EventsManager.OnIsCheatingChanged -= OnIsCheatingChanged;
             OnLoseControl();
         }
 
@@ -53,15 +57,26 @@ namespace Zagzag.Common.Character
             {
                 case MoveDirection.Right:
                     direction = MoveDirection.Left;
+                    lookDirection = Vector3.forward;
                     break;
                 case MoveDirection.Left:
                     direction = MoveDirection.Right;
+                    lookDirection = Vector3.right;
                     break;
             }
+            AudioController.Instance.PlaySound(Sounds.Ball);
         }
 
         private void Move() 
         {
+            if (isCheating)
+            {
+                Debug.DrawRay(transform.position, lookDirection, Color.red, .25f);
+                if (Physics.Raycast(transform.position, lookDirection , .5f, layerMask))
+                {
+                    ToggleDirection();
+                }
+            }
             switch (direction)
             {
                 case MoveDirection.Right:
@@ -79,9 +94,10 @@ namespace Zagzag.Common.Character
 
         private void OnGetControl() 
         {
-            EventsManager.OnTap += OnTap;
             EventsManager.OnSpeedChanged += OnSpeedChanged;
             speed = Parameters.GetMoveSpeed();
+            isCheating = Parameters.GetIsCheating();
+            EventsManager.OnTap += OnTap;
         }
 
         private void OnLoseControl() 
@@ -94,16 +110,21 @@ namespace Zagzag.Common.Character
         {
             if (Parameters.GetGameState() == GameState.Palying)
             {
-                Parameters.AddScore(1);
-                ToggleDirection();
-                AudioController.Instance.PlaySound(Sounds.Ball);
+                if (!isCheating)
+                {
+                    ToggleDirection();
+                    Parameters.AddScore(1);
+                }
             }
             else if (Parameters.GetGameState() == GameState.Ready)
             {
-                Parameters.AddScore(1);
-                ToggleDirection();
+                lookDirection = Vector3.forward;
                 Parameters.SetGameState(GameState.Palying);
-                AudioController.Instance.PlaySound(Sounds.Ball);
+                if (!isCheating)
+                {
+                    ToggleDirection();
+                    Parameters.AddScore(1);
+                }
             }
 
         }
@@ -111,6 +132,11 @@ namespace Zagzag.Common.Character
         private void OnSpeedChanged(float newSpeed) 
         {
             speed = newSpeed;
+        }
+
+        private void OnIsCheatingChanged(bool value) 
+        {
+            isCheating = value;
         }
 
         private void OnGamePrepeared() 

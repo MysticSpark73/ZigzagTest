@@ -117,5 +117,19 @@ namespace Zagzag.Core.Data
         public static int GetGems() => gems;
 
         #endregion
+
+        #region Cheat
+
+        private static bool isCheating = false;
+
+        public static void SetCheating(bool value)
+        {
+            isCheating = value;
+            EventsManager.OnIsCheatingChanged(isCheating);
+        }
+
+        public static bool GetIsCheating() => isCheating;
+
+        #endregion
     }
 }

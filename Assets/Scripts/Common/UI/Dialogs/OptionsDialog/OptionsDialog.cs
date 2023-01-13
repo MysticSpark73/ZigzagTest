@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zagzag.Common.Audio;
+using Zagzag.Core.Data;
 
 namespace Zagzag.Common.UI.Dialogs.OptionsDialog
 {
@@ -84,6 +85,8 @@ namespace Zagzag.Common.UI.Dialogs.OptionsDialog
             backButton.onClick.AddListener(() => OnBackClicked());
             soundsButton.onClick.RemoveAllListeners();
             soundsButton.onClick.AddListener(() => OnSoundClicked());
+            cheatButton.onClick.RemoveAllListeners();
+            cheatButton.onClick.AddListener(() => OnCheatClicked());
             //add chaeting
         }
 
@@ -107,9 +110,17 @@ namespace Zagzag.Common.UI.Dialogs.OptionsDialog
             SetValues();
         }
 
+        private void OnCheatClicked() 
+        {
+            AudioController.Instance.PlaySound(Sounds.Menu);
+            Parameters.SetCheating(!Parameters.GetIsCheating());
+            SetValues();
+        }
+
         private void SetValues() 
         {
             soundText.text = AudioController.Instance.IsMuted ? mutedText : unmutedText;
+            cheatText.text = Parameters.GetIsCheating() ? cheatingText : notCheatingText; 
         }
 
         private void DialogReset() 

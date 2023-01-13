@@ -32,5 +32,11 @@ namespace Zagzag.Core.Events
         public static Action<int> OnScoreChanged;
 
         #endregion
+
+        #region Cheats
+
+        public static Action<bool> OnIsCheatingChanged;
+
+        #endregion
     }
 }
